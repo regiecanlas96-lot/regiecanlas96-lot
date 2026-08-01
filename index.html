@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mara Voss — 3D Artist Portfolio</title>
+<meta name="description" content="Mara Voss is a 3D artist creating high-quality models, environments, and visuals for games, film, and digital experiences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0a0a0b;
+    --panel: #141416;
+    --panel-alt: #1b1b1e;
+    --line: rgba(236,234,229,0.09);
+    --line-strong: rgba(236,234,229,0.16);
+    --bone: #ece9e2;
+    --bone-dim: #9a988f;
+    --bone-faint: #5f5e58;
+    --copper: #cf8552;
+    --copper-dim: #8a5b3c;
+    --wire: #565a63;
+    --radius: 2px;
+    --wrap: 1180px;
+    --ease: cubic-bezier(.22,.68,0,1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--copper); color:#100c08; }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  img,svg{ display:block; max-width:100%; }
+
+  .wrap{ max-width:var(--wrap); margin:0 auto; padding:0 40px; }
+
+  h1,h2,h3{
+    font-family:'Syne', sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:var(--bone);
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--copper);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:16px; height:1px;
+    background:var(--copper-dim);
+  }
+
+  :focus-visible{
+    outline: 2px solid var(--copper);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:14px 26px;
+    border-radius:var(--radius);
+    border:1px solid var(--line-strong);
+    transition:border-color .25s var(--ease), background .25s var(--ease), color .25s var(--ease), transform .2s var(--ease);
+    cursor:pointer;
+    background:none;
+  }
+  .btn-solid{
+    background:var(--bone);
+    color:var(--ink);
+    border-color:var(--bone);
+  }
+  .btn-solid:hover{ background:var(--copper); border-color:var(--copper); color:#100c08; transform:translateY(-2px); }
+  .btn-ghost:hover{ border-color:var(--copper); color:var(--copper); transform:translateY(-2px); }
+  .btn-line{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.05em;
+    color:var(--bone-dim);
+    display:inline-flex; align-items:center; gap:6px;
+    border-bottom:1px solid var(--line-strong);
+    padding-bottom:2px;
+    transition:color .2s var(--ease), border-color .2s var(--ease), gap .2s var(--ease);
+  }
+  .btn-line:hover{ color:var(--copper); border-color:var(--copper); gap:10px; }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(10,10,11,0.72);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Syne', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    letter-spacing:0.02em;
+  }
+  .logo-mark{ width:22px; height:22px; flex-shrink:0; }
+  .navlinks{
+    display:flex; gap:36px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+  .navlinks a{
+    color:var(--bone-dim);
+    position:relative;
+    padding-bottom:6px;
+    transition:color .2s var(--ease);
+  }
+  .navlinks a:hover, .navlinks a.active{ color:var(--bone); }
+  .navlinks a.active::after{
+    content:"";
+    position:absolute; left:0; bottom:0;
+    width:100%; height:1px;
+    background:var(--copper);
+  }
+  .nav-right{ display:flex; align-items:center; gap:22px; }
+  .menu-dot{
+    width:34px; height:34px;
+    border:1px solid var(--line-strong);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .menu-dot span{ width:14px; height:1px; background:var(--bone-dim); }
+  .nav-toggle{ display:none; }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:190px 0 120px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+    position:relative;
+  }
+  .hero-copy h1{
+    font-size:clamp(42px, 5.4vw, 68px);
+    line-height:1.04;
+    margin:22px 0 26px;
+  }
+  .hero-copy h1 em{
+    font-style:normal;
+    color:var(--copper);
+  }
+  .hero-copy p{
+    color:var(--bone-dim);
+    font-size:16.5px;
+    max-width:440px;
+    margin-bottom:38px;
+  }
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; }
+
+  .hero-visual{
+    position:relative;
+    height:460px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stage{
+    width:100%; height:100%;
+    perspective:1100px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cube{
+    width:230px; height:230px;
+    position:relative;
+    transform-style:preserve-3d;
+    animation:spin 22s linear infinite;
+  }
+  .cube-face{
+    position:absolute;
+    width:230px; height:230px;
+    border:1px solid var(--wire);
+    background:linear-gradient(135deg, rgba(207,133,82,0.04), transparent 60%);
+  }
+  .cube-face::before, .cube-face::after{
+    content:"";
+    position:absolute;
+    top:0; left:50%;
+    width:1px; height:100%;
+    background:var(--wire);
+    opacity:0.55;
+  }
+  .cube-face::before{ transform:translateX(-50%) rotate(38deg); transform-origin:center; }
+  .cube-face::after{ transform:translateX(-50%) rotate(-38deg); transform-origin:center; }
+  .face-front{ transform:translateZ(115px); }
+  .face-back{ transform:translateZ(-115px) rotateY(180deg); }
+  .face-left{ transform:rotateY(-90deg) translateZ(115px); }
+  .face-right{ transform:rotateY(90deg) translateZ(115px); }
+  .face-top{ transform:rotateX(90deg) translateZ(115px); }
+  .face-bottom{ transform:rotateX(-90deg) translateZ(115px); }
+  @keyframes spin{
+    from{ transform:rotateX(-18deg) rotateY(0deg); }
+    to{ transform:rotateX(-18deg) rotateY(360deg); }
+  }
+  .stage-label{
+    position:absolute; bottom:0; left:50%;
+    transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--bone-faint);
+  }
+
+  .side-social{
+    position:fixed;
+    left:40px; bottom:0;
+    display:flex; flex-direction:column; gap:20px;
+    z-index:20;
+  }
+  .side-social a{
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--bone-faint);
+    border:1px solid transparent;
+    border-radius:50%;
+    transition:color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .side-social a:hover{ color:var(--copper); border-color:var(--line-strong); }
+  .side-social::after{
+    content:"";
+    display:block;
+    width:1px; height:60px;
+    background:var(--line-strong);
+    margin:6px auto 22px;
+  }
+
+  .scroll-indicator{
+    position:absolute;
+    right:40px; bottom:-60px;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--bone-faint);
+  }
+  .scroll-indicator .line{
+    width:1px; height:38px;
+    background:var(--line-strong);
+    position:relative;
+    overflow:hidden;
+  }
+  .scroll-indicator .line::after{
+    content:"";
+    position:absolute; top:-100%; left:0;
+    width:100%; height:100%;
+    background:var(--copper);
+    animation:trickle 2.4s ease-in-out infinite;
+  }
+  @keyframes trickle{
+    0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; }
+  }
+
+  /* ---------- Section shell ---------- */
+  section{ position:relative; }
+  .section-pad{ padding:120px 0; }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:30px;
+    margin-bottom:56px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{ font-size:clamp(28px, 3vw, 38px); margin-top:14px; }
+
+  /* ---------- About ---------- */
+  .about{ background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .about-grid{
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:70px;
+    align-items:center;
+  }
+  .portrait{
+    aspect-ratio:4/5;
+    border:1px solid var(--line-strong);
+    position:relative;
+    background:
+      linear-gradient(var(--panel-alt), var(--panel-alt)) padding-box;
+    overflow:hidden;
+  }
+  .portrait svg{ width:100%; height:100%; }
+  .about-body p{ color:var(--bone-dim); margin-bottom:16px; max-width:520px; }
+  .about-body .eyebrow{ margin-bottom:14px; }
+  .about-body h2{ font-size:clamp(26px,2.8vw,34px); margin-bottom:22px; }
+  .about-body .btn{ margin-top:20px; }
+
+  .traits{
+    margin-top:52px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:36px;
+    padding-top:44px;
+    border-top:1px solid var(--line);
+  }
+  .trait-icon{
+    width:36px; height:36px;
+    margin-bottom:16px;
+    color:var(--copper);
+  }
+  .trait h3{ font-size:16px; margin-bottom:8px; }
+  .trait p{ color:var(--bone-dim); font-size:14px; }
+
+  /* ---------- Projects ---------- */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:24px;
+  }
+  .project-card{
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:0;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    transition:border-color .3s var(--ease), transform .3s var(--ease);
+  }
+  .project-card:hover{ border-color:var(--copper-dim); transform:translateY(-6px); }
+  .project-thumb{
+    aspect-ratio:1/1;
+    background:var(--panel-alt);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .project-thumb svg{ width:62%; height:62%; color:var(--wire); transition:color .3s var(--ease), transform .5s var(--ease); }
+  .project-card:hover .project-thumb svg{ color:var(--copper); transform:scale(1.06); }
+  .project-info{ padding:22px 20px 24px; }
+  .project-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--copper);
+    margin-bottom:10px;
+    display:block;
+  }
+  .project-info h3{ font-size:17px; margin-bottom:12px; }
+
+  /* ---------- Tools ---------- */
+  .tools{ background:var(--panel-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:64px 0; }
+  .tools .eyebrow{ justify-content:center; margin-bottom:40px; }
+  .tools .eyebrow::before{ display:none; }
+  .tools-row{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+  }
+  .tool{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    padding:20px 10px;
+    color:var(--bone-dim);
+    transition:color .2s var(--ease);
+  }
+  .tool:hover{ color:var(--bone); }
+  .tool-icon{
+    width:44px; height:44px;
+    border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .2s var(--ease);
+  }
+  .tool:hover .tool-icon{ border-color:var(--copper); }
+  .tool-icon svg{ width:20px; height:20px; color:var(--bone-dim); }
+  .tool span{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.04em; }
+
+  /* ---------- Process ---------- */
+  .process-grid{
+    display:grid;
+    grid-template-columns:0.8fr 1.2fr;
+    gap:70px;
+    align-items:center;
+  }
+  .process-body .eyebrow{ margin-bottom:14px; }
+  .process-body h2{ font-size:clamp(26px,2.8vw,34px); margin-bottom:20px; }
+  .process-body p{ color:var(--bone-dim); max-width:400px; margin-bottom:30px; }
+
+  .process-steps{
+    display:flex;
+    align-items:flex-start;
+    gap:0;
+  }
+  .p-step{
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    width:110px;
+  }
+  .p-step-num{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    color:var(--bone-faint);
+    margin-bottom:10px;
+  }
+  .p-step-icon{
+    width:52px; height:52px;
+    border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:14px;
+    transition:border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .p-step-icon svg{ width:22px; height:22px; color:var(--copper); }
+  .p-step:hover .p-step-icon{ border-color:var(--copper); background:rgba(207,133,82,0.06); }
+  .p-step h4{ font-family:'Syne',sans-serif; font-size:14px; font-weight:600; margin-bottom:6px; }
+  .p-step p{ font-size:12px; color:var(--bone-faint); line-height:1.5; }
+  .p-arrow{
+    flex-shrink:0;
+    width:34px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--bone-faint);
+    margin-top:26px;
+  }
+  .p-arrow svg{ width:18px; height:18px; }
+
+  /* ---------- CTA ---------- */
+  .cta{
+    padding:130px 0;
+    text-align:center;
+    position:relative;
+    border-top:1px solid var(--line);
+    overflow:hidden;
+  }
+  .cta-bg{
+    position:absolute; inset:0;
+    opacity:0.5;
+    pointer-events:none;
+  }
+  .cta-inner{ position:relative; z-index:2; max-width:560px; margin:0 auto; }
+  .cta .eyebrow{ justify-content:center; margin-bottom:20px; }
+  .cta .eyebrow::before{ display:none; }
+  .cta h2{ font-size:clamp(30px,4vw,46px); margin-bottom:18px; }
+  .cta p{ color:var(--bone-dim); margin-bottom:34px; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:70px 0 40px; border-top:1px solid var(--line); }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr 1.3fr;
+    gap:40px;
+    padding-bottom:56px;
+  }
+  .footer-brand p{ color:var(--bone-faint); font-size:13px; margin-top:16px; max-width:220px; }
+  .footer-col h4{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--bone-faint);
+    margin-bottom:18px;
+  }
+  .footer-col li{ margin-bottom:12px; }
+  .footer-col a{ color:var(--bone-dim); font-size:14px; transition:color .2s var(--ease); }
+  .footer-col a:hover{ color:var(--copper); }
+  .footer-contact li{ display:flex; align-items:center; gap:10px; color:var(--bone-dim); font-size:14px; margin-bottom:14px; }
+  .footer-contact svg{ width:15px; height:15px; color:var(--copper); flex-shrink:0; }
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:28px; border-top:1px solid var(--line);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--bone-faint);
+    flex-wrap:wrap; gap:14px;
+  }
+
+  /* ---------- Reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .cube{ animation:none; }
+    .scroll-indicator .line::after{ animation:none; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:1080px){
+    .wrap{ padding:0 28px; }
+    .tools-row{ grid-template-columns:repeat(4,1fr); }
+    .footer-top{ grid-template-columns:1fr 1fr; row-gap:40px; }
+  }
+  @media (max-width:900px){
+    .hero{ grid-template-columns:1fr; padding-top:150px; }
+    .hero-visual{ height:320px; order:-1; }
+    .about-grid{ grid-template-columns:1fr; }
+    .traits{ grid-template-columns:1fr; }
+    .projects-grid{ grid-template-columns:repeat(2,1fr); }
+    .process-grid{ grid-template-columns:1fr; }
+    .process-steps{ flex-wrap:wrap; justify-content:center; row-gap:24px; }
+    .side-social{ display:none; }
+    .navlinks{ display:none; }
+    .scroll-indicator{ display:none; }
+  }
+  @media (max-width:560px){
+    .wrap{ padding:0 20px; }
+    section.section-pad, .about, .cta{ padding-top:80px; padding-bottom:80px; }
+    .projects-grid{ grid-template-columns:1fr; }
+    .tools-row{ grid-template-columns:repeat(2,1fr); }
+    .footer-top{ grid-template-columns:1fr; }
+    .process-steps{ flex-direction:column; align-items:center; }
+    .p-arrow{ transform:rotate(90deg); margin:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="side-social">
+  <a href="#" aria-label="ArtStation">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 17.5h9.7L14 21.4H4.3zM13.4 2.6 22 17.4l-2.1 3.6L9 3.5z"/></svg>
+  </a>
+  <a href="#" aria-label="Instagram">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a href="#" aria-label="LinkedIn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2 2 0 0 1 4 0V17M12 12.5V17"/></svg>
+  </a>
+  <a href="#" aria-label="Behance">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 7h6M2 7v10h5.5a3 3 0 0 0 0-6H4M17 7h5M14.5 12.2a4.2 3.6 0 1 1 8 1.3h-8a3.6 3.2 0 0 0 6 2"/></svg>
+  </a>
+</div>
+
+<header>
+  <nav class="nav wrap">
+    <a href="#top" class="logo">
+      <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2 21 7v10L12 22 3 17V7z"/><path d="M12 2v20M3 7l9 5 9-5M3 17l9-5 9 5"/></svg>
+      MARA VOSS
+    </a>
+    <ul class="navlinks">
+      <li><a href="#top" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="menu-dot" aria-hidden="true"><span></span></div>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="hero-copy reveal in">
+      <span class="eyebrow">3D Artist</span>
+      <h1>Bringing Ideas<br>to Life in <em>3D</em></h1>
+      <p>I model, texture, and light high-fidelity 3D assets and environments for games, film, and interactive experiences — from first blockout to final render.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-solid">View My Work</a>
+        <a href="#about" class="btn btn-ghost">About Me</a>
+      </div>
+    </div>
+    <div class="hero-visual reveal in">
+      <div class="stage">
+        <div class="cube">
+          <div class="cube-face face-front"></div>
+          <div class="cube-face face-back"></div>
+          <div class="cube-face face-left"></div>
+          <div class="cube-face face-right"></div>
+          <div class="cube-face face-top"></div>
+          <div class="cube-face face-bottom"></div>
+        </div>
+      </div>
+      <span class="stage-label">230,412 tris — live wireframe</span>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <span class="line"></span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap section-pad">
+      <div class="about-grid">
+        <div class="portrait reveal">
+          <svg viewBox="0 0 300 375" fill="none" stroke="#565a63" stroke-width="1">
+            <rect x="0.5" y="0.5" width="299" height="374"/>
+            <path d="M0 0 300 375M300 0 0 375"/>
+            <circle cx="150" cy="150" r="60" stroke="#cf8552" opacity="0.6"/>
+            <circle cx="150" cy="150" r="34" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="about-body reveal">
+          <span class="eyebrow">About Me</span>
+          <h2>3D Artist Passionate About Details</h2>
+          <p>I'm a 3D artist with a passion for creating detailed, immersive, and optimized 3D content across games, film, and real-time applications.</p>
+          <p>With a strong eye for composition and form, I bring concepts to life through precise topology, considered lighting, and materials that hold up under scrutiny.</p>
+          <a href="#experience" class="btn btn-ghost">Learn More</a>
+
+          <div class="traits">
+            <div class="trait">
+              <svg class="trait-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2 21 7v10L12 22 3 17V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>
+              <h3>High Quality</h3>
+              <p>Clean topology and attention to detail in every project.</p>
+            </div>
+            <div class="trait">
+              <svg class="trait-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7h5.6c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3z"/></svg>
+              <h3>Creative Approach</h3>
+              <p>Turning ideas into engaging visual experiences.</p>
+            </div>
+            <div class="trait">
+              <svg class="trait-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+              <h3>Optimized Workflow</h3>
+              <p>Efficient pipeline for games, animation, and real-time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work section-pad" id="work">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Featured Work</span>
+          <h2>Selected Projects</h2>
+        </div>
+        <a href="#" class="btn-line">View All Work
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="projects-grid">
+        <article class="project-card reveal">
+          <div class="project-thumb">
+            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+              <circle cx="50" cy="24" r="12"/>
+              <path d="M50 36v18M38 46h24M38 46 28 74M62 46l10 28M42 54 34 82M58 54l8 28"/>
+            </svg>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Character</span>
+            <h3>Cyberpunk Soldier</h3>
+            <a href="#" class="btn-line">View Project
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-thumb">
+            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M10 82h80M18 82V44l16-12 16 12v38M50 82V30l16-14 16 14v52M26 82V58h8v24M58 82V54h10v28"/>
+            </svg>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Environment</span>
+            <h3>Abandoned Factory</h3>
+            <a href="#" class="btn-line">View Project
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-thumb">
+            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+              <circle cx="28" cy="72" r="10"/><circle cx="74" cy="72" r="10"/>
+              <path d="M28 72h20l10-24h16M48 72l8-18M20 50h18l6-10"/>
+            </svg>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Vehicle</span>
+            <h3>Futuristic Hoverbike</h3>
+            <a href="#" class="btn-line">View Project
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-thumb">
+            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.2">
+              <rect x="26" y="20" width="48" height="34" rx="2"/>
+              <path d="M34 30h32M34 38h20M26 62h48M40 62v8M60 62v8M32 78h36"/>
+            </svg>
+          </div>
+          <div class="project-info">
+            <span class="project-tag">Prop</span>
+            <h3>Sci-Fi Terminal</h3>
+            <a href="#" class="btn-line">View Project
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="tools" id="tools">
+    <div class="wrap">
+      <span class="eyebrow reveal" style="display:flex; justify-content:center;">Tools I Use</span>
+      <div class="tools-row">
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 4h9l7 7v9H4z"/><path d="M13 4v7h7"/></svg></div>
+          <span>ZBrush</span>
+        </div>
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18"/></svg></div>
+          <span>Maya</span>
+        </div>
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2 21 7v10L12 22 3 17V7z"/></svg></div>
+          <span>Blender</span>
+        </div>
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/></svg></div>
+          <span>Substance 3D</span>
+        </div>
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 3v18M18 3v18M6 8h12M6 16h12"/></svg></div>
+          <span>Marvelous Designer</span>
+        </div>
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 12 12 3l9 9-9 9z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <span>Unreal Engine</span>
+        </div>
+        <div class="tool reveal">
+          <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="9" cy="9" r="5"/><circle cx="15" cy="15" r="5"/></svg></div>
+          <span>Photoshop</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS / EXPERIENCE -->
+  <section class="process section-pad" id="experience">
+    <div class="wrap process-grid">
+      <div class="process-body reveal">
+        <span class="eyebrow">Experience</span>
+        <h2>From Concept to Final Render</h2>
+        <p>I follow a complete pipeline from ideation and modeling to texturing, lighting, and rendering to deliver production-ready results.</p>
+        <a href="#" class="btn btn-ghost">View Workflow</a>
+      </div>
+
+      <div class="process-steps reveal">
+        <div class="p-step">
+          <span class="p-step-num">01</span>
+          <div class="p-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7h5.6c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3z"/></svg></div>
+          <h4>Concept</h4>
+          <p>Research and idea development</p>
+        </div>
+        <div class="p-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="p-step">
+          <span class="p-step-num">02</span>
+          <div class="p-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2 21 7v10L12 22 3 17V7z"/><path d="M3 7l9 5 9-5"/></svg></div>
+          <h4>Modeling</h4>
+          <p>High &amp; low poly 3D modeling</p>
+        </div>
+        <div class="p-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="p-step">
+          <span class="p-step-num">03</span>
+          <div class="p-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9.5h16M9.5 4v16"/></svg></div>
+          <h4>Texturing</h4>
+          <p>PBR materials and UV mapping</p>
+        </div>
+        <div class="p-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="p-step">
+          <span class="p-step-num">04</span>
+          <div class="p-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg></div>
+          <h4>Lighting</h4>
+          <p>Setting the mood and atmosphere</p>
+        </div>
+        <div class="p-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        <div class="p-step">
+          <span class="p-step-num">05</span>
+          <div class="p-step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v4M16 3v4M8 17v4M16 17v4"/></svg></div>
+          <h4>Rendering</h4>
+          <p>High quality final output</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="wrap cta-inner reveal">
+      <span class="eyebrow">Let's Talk</span>
+      <h2>Let's Work Together</h2>
+      <p>Have a project in mind or want to collaborate? Feel free to reach out — I'd love to hear about it.</p>
+      <a href="mailto:hello@maravoss.com" class="btn btn-solid">Contact Me</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="logo">
+          <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2 21 7v10L12 22 3 17V7z"/><path d="M12 2v20M3 7l9 5 9-5M3 17l9-5 9 5"/></svg>
+          MARA VOSS
+        </a>
+        <p>© 2026 Mara Voss. All rights reserved.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#top">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#tools">Tools</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Socials</h4>
+        <ul>
+          <li><a href="#">ArtStation</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">Behance</a></li>
+          <li><a href="#">YouTube</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            hello@maravoss.com
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
+            Lisbon, Portugal
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/></svg>
+            Available for freelance
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Built with plain HTML / CSS / JS</span>
+      <span>Back to top ↑</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('main section[id], main[id]');
+  const navLinks = document.querySelectorAll('.navlinks a');
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { threshold: 0.4, rootMargin: '-76px 0px -60% 0px' });
+  sections.forEach(s => navIO.observe(s));
+
+  // Subtle cube tilt follow on pointer move (disabled for touch / reduced motion)
+  const stage = document.querySelector('.stage');
+  const cube = document.querySelector('.cube');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(stage && cube && !reduceMotion && window.matchMedia('(pointer: fine)').matches){
+    stage.addEventListener('mousemove', (e) => {
+      const rect = stage.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      cube.style.animationPlayState = 'paused';
+      cube.style.transform = `rotateX(${-18 - y * 14}deg) rotateY(${x * 24}deg)`;
+    });
+    stage.addEventListener('mouseleave', () => {
+      cube.style.transform = '';
+      cube.style.animationPlayState = 'running';
+    });
+  }
+</script>
+
+</body>
+</html>
