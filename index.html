@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Regie Canlas — 3D Artist &amp; Blender Artist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d13;
+    --bg-alt:#0d1119;
+    --card:#12161f;
+    --card-2:#151a24;
+    --border:#20262f;
+    --text:#f2f3f5;
+    --text-dim:#9aa3af;
+    --text-faint:#6b7280;
+    --cyan:#22d3ee;
+    --cyan-dim:#1a8fa3;
+    --header-bg:rgba(10,13,19,0.85);
+    --overlay:rgba(6,8,12,.55);
+    --radius:10px;
+    --max:1200px;
+    color-scheme:dark;
+  }
+  html[data-theme="light"]{
+    --bg:#f6f7f9;
+    --bg-alt:#eef0f3;
+    --card:#ffffff;
+    --card-2:#f2f3f6;
+    --border:#e3e6eb;
+    --text:#12161f;
+    --text-dim:#4b5563;
+    --text-faint:#6b7280;
+    --cyan:#0891a8;
+    --cyan-dim:#067087;
+    --header-bg:rgba(246,247,249,0.85);
+    --overlay:rgba(255,255,255,.6);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition:background .25s ease, color .25s ease;
+  }
+  h1,h2,h3,.display{font-family:'Sora', sans-serif;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit;}
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 32px;}
+  .eyebrow{
+    color:var(--cyan);
+    font-size:12.5px;
+    font-weight:700;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    margin-bottom:10px;
+    display:block;
+  }
+
+  /* NAV */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:var(--header-bg);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+    gap:20px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:1px; font-size:15px;}
+  .logo-img{height:34px; width:auto;}
+  .nav-links{display:flex; gap:34px; font-size:13px; font-weight:600; letter-spacing:1px;}
+  .nav-links a{color:var(--text-dim); position:relative; padding-bottom:6px; transition:color .2s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a.active{color:var(--text);}
+  .nav-links a.active::after{
+    content:''; position:absolute; left:0; right:0; bottom:-27px; height:2px; background:var(--cyan);
+  }
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .theme-toggle{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; background:var(--card);
+    color:var(--text-dim); font-size:15px;
+  }
+  .menu-toggle{
+    display:none; width:38px; height:38px; border-radius:8px; border:1px solid var(--border);
+    background:var(--card); color:var(--text); font-size:18px; cursor:pointer;
+    align-items:center; justify-content:center;
+  }
+
+  /* HERO */
+  .hero{padding:88px 0 100px;}
+  .hero-grid{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;}
+  .hello{color:var(--cyan); font-weight:600; font-size:16px; margin-bottom:14px; display:block;}
+  .hero h1{
+    font-size:56px; font-weight:800; line-height:1.05; letter-spacing:.5px; margin-bottom:16px;
+  }
+  .role{
+    font-size:17px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+    color:var(--text); margin-bottom:22px;
+  }
+  .role .accent{color:var(--cyan);}
+  .hero p.desc{color:var(--text-dim); font-size:16px; max-width:460px; margin-bottom:34px;}
+  .btn-row{display:flex; gap:16px; margin-bottom:36px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 26px; border-radius:6px; font-weight:700; font-size:13.5px;
+    letter-spacing:1px; text-transform:uppercase; cursor:pointer; border:1px solid transparent;
+    transition:transform .15s ease, opacity .15s ease, background .2s ease, color .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--cyan); color:#04121a;}
+  .btn-outline{border-color:var(--border); color:var(--text); background:transparent;}
+  .btn-outline:hover{border-color:var(--cyan);}
+  .socials{display:flex; gap:14px;}
+  .socials a{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; color:var(--text-dim);
+    font-size:15px; transition:.2s;
+  }
+  .socials a:hover{border-color:var(--cyan); color:var(--cyan);}
+
+  .hero-visual{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--border);}
+  .hero-visual img{width:100%; height:520px; object-fit:cover; display:block;}
+  .hero-caption{
+    position:absolute; left:20px; bottom:18px; display:flex; align-items:center; gap:12px;
+    font-size:13px; color:#fff; font-weight:600;
+  }
+  .dots{display:flex; gap:6px;}
+  .dots span{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.35);}
+  .dots span.on{background:var(--cyan); width:16px; border-radius:4px;}
+
+  section{padding:90px 0;}
+  section.tight{padding:70px 0;}
+
+  /* ABOUT */
+  .about-grid{display:grid; grid-template-columns:280px 1fr 1fr; gap:56px;}
+  .about-photo img{
+    width:100%; height:340px; object-fit:cover; border-radius:12px; filter:grayscale(60%);
+    border:1px solid var(--border);
+  }
+  .about-text h2{font-size:30px; font-weight:700; margin-bottom:16px; line-height:1.25;}
+  .about-text h2 .accent{color:var(--cyan);}
+  .about-text p{color:var(--text-dim); font-size:14.5px; margin-bottom:20px;}
+  .signature{font-family:'Caveat', cursive; font-size:30px; color:var(--cyan); margin-bottom:22px;}
+
+  .skills-cols h3.sub{font-size:12px; letter-spacing:2px; color:var(--text-faint); margin:0 0 16px; text-transform:uppercase;}
+  .software-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:30px;}
+  .software-item{
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:16px 8px; text-align:center; font-size:11.5px; color:var(--text-dim); font-weight:600;
+  }
+  .software-icon{
+    width:40px; height:40px; margin:0 auto 10px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; font-family:'Sora',sans-serif;
+  }
+  .ic-blender{background:#e6844633;color:#f4813f;}
+  .ic-zbrush{background:#88888822;color:var(--text);}
+  .ic-ps{background:#31a8ff22;color:#1f8fe0;}
+  .ic-sp{background:#e0383d22;color:#e0383d;}
+  .ic-ue{background:#88888822;color:var(--text);}
+  .ic-ai{background:#ff9a0022;color:#e08600;}
+
+  .specialties{display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; font-size:14px; color:var(--text-dim);}
+  .specialties li{display:flex; align-items:center; gap:8px;}
+  .specialties li::before{content:'✓'; color:var(--cyan); font-weight:700;}
+
+  .download-btn{margin-top:8px;}
+
+  /* PROJECTS */
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:30px; flex-wrap:wrap; gap:14px;}
+  .section-head .view-all{color:var(--cyan); font-size:13.5px; font-weight:600;}
+  .projects-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .project-card{
+    background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .project-card:hover{transform:translateY(-4px); border-color:var(--cyan);}
+  .project-card img{width:100%; height:210px; object-fit:cover;}
+  .project-info{padding:18px 20px; display:flex; justify-content:space-between; align-items:center;}
+  .project-info h4{font-size:16px; font-weight:700; margin-bottom:4px;}
+  .project-info .meta{font-size:12.5px; color:var(--text-faint);}
+  .project-info .cat{font-size:12px; color:var(--cyan); margin-top:2px; display:block;}
+  .arrow-btn{
+    color:var(--cyan); font-size:18px; background:none; border:none; cursor:pointer;
+    width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    transition:background .2s;
+  }
+  .arrow-btn:hover{background:var(--card-2);}
+
+  /* GALLERY */
+  .gallery-tabs{display:flex; gap:26px; font-size:13px; font-weight:600; color:var(--text-dim); flex-wrap:wrap;}
+  .gallery-tabs button{
+    background:none; border:none; cursor:pointer; color:inherit; font:inherit; letter-spacing:1px; padding-bottom:6px;
+  }
+  .gallery-tabs button.active{color:var(--cyan); border-bottom:2px solid var(--cyan);}
+  .gallery-grid{display:grid; grid-template-columns:repeat(5,1fr); grid-auto-rows:170px; gap:14px; margin-top:30px;}
+  .gallery-grid figure{border-radius:10px; overflow:hidden; position:relative; border:1px solid var(--border); cursor:pointer;}
+  .gallery-grid figure.hidden-item{display:none;}
+  .gallery-grid img{width:100%; height:100%; object-fit:cover; transition:transform .3s;}
+  .gallery-grid figure:hover img{transform:scale(1.06);}
+  .gallery-overlay{
+    position:absolute; inset:0; background:var(--overlay); display:flex; align-items:center; justify-content:center;
+  }
+  .view-full-btn{
+    background:var(--bg-alt); border:1px solid var(--border); color:var(--text); font-size:12px; font-weight:700;
+    letter-spacing:1px; text-transform:uppercase; padding:10px 18px; border-radius:6px; cursor:pointer;
+  }
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border); padding:64px 0 0; background:var(--bg-alt);}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr; gap:40px; padding-bottom:44px;}
+  .footer-brand p{color:var(--text-dim); font-size:13.5px; margin-top:12px; max-width:220px;}
+  .footer-brand .role-tag{color:var(--cyan); font-size:12.5px; font-weight:600; margin-top:2px; display:block;}
+  footer h5{font-size:12.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-faint); margin-bottom:16px;}
+  footer .links li{margin-bottom:10px;}
+  footer .links a{color:var(--text-dim); font-size:14px;}
+  footer .links a:hover{color:var(--cyan);}
+  .contact-list li{display:flex; gap:10px; align-items:center; color:var(--text-dim); font-size:14px; margin-bottom:12px;}
+  .contact-list a{color:inherit;}
+  .contact-list a:hover{color:var(--cyan);}
+  .contact-list span.ic{color:var(--cyan);}
+  footer .cta p{color:var(--text-dim); font-size:13.5px; margin-bottom:18px;}
+  .footer-bottom{
+    border-top:1px solid var(--border); padding:22px 0; text-align:center; color:var(--text-faint); font-size:12.5px;
+  }
+
+  .visually-hidden{
+    position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;
+  }
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--cyan); outline-offset:2px;
+  }
+
+  @media(max-width:980px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-visual img{height:360px;}
+    .about-grid{grid-template-columns:1fr;}
+    .about-photo img{height:260px;}
+    .projects-grid{grid-template-columns:1fr 1fr;}
+    .gallery-grid{grid-template-columns:repeat(3,1fr);}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .menu-toggle{display:flex;}
+    .nav-links{
+      position:fixed; top:76px; left:0; right:0;
+      background:var(--bg-alt); border-bottom:1px solid var(--border);
+      flex-direction:column; gap:0; padding:6px 32px 18px;
+      transform:translateY(-10px); opacity:0; pointer-events:none;
+      transition:transform .2s ease, opacity .2s ease;
+      max-height:calc(100vh - 76px); overflow-y:auto;
+    }
+    .nav-links.open{transform:translateY(0); opacity:1; pointer-events:auto;}
+    .nav-links a{width:100%; padding:14px 0; border-bottom:1px solid var(--border);}
+    .nav-links a.active::after{display:none;}
+  }
+  @media(max-width:640px){
+    .hero{padding:48px 0 64px;}
+    .hero h1{font-size:36px;}
+    .role{font-size:14px; letter-spacing:2px;}
+    section{padding:56px 0;}
+    section.tight{padding:44px 0;}
+    .about-grid{gap:32px;}
+    .software-grid{grid-template-columns:repeat(3,1fr);}
+    .projects-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:150px;}
+    .footer-grid{grid-template-columns:1fr; gap:32px;}
+    .wrap{padding:0 20px;}
+    .btn-row{gap:12px;}
+    .btn{padding:13px 20px; font-size:12.5px;}
+  }
+  @media(max-width:400px){
+    .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:130px;}
+    .software-grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#home" class="brand">
+      <img class="logo-img" id="logoNav" src="" alt="Regie Canlas logo">
+      <span>REGIE CANLAS</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">HOME</a></li>
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#projects">PROJECTS</a></li>
+      <li><a href="#gallery">GALLERY</a></li>
+      <li><a href="#services">SERVICES</a></li>
+      <li><a href="#experience">EXPERIENCE</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode" title="Toggle theme">☾</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hello">Hello, I'm</span>
+      <h1>REGIE CANLAS</h1>
+      <div class="role">3D ARTIST • <span class="accent">BLENDER ARTIST</span></div>
+      <p class="desc">I create high-quality 3D models, environments, product visualizations, and realistic renders using Blender.</p>
+      <div class="btn-row">
+        <a href="#projects" class="btn btn-primary">View Portfolio →</a>
+        <a href="#contact" class="btn btn-outline">Contact Me</a>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/regiecanlas" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
+        <a href="https://artstation.com/regiecanlas" target="_blank" rel="noopener" aria-label="ArtStation">AS</a>
+        <a href="https://instagram.com/regiecanlas" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        <a href="https://linkedin.com/in/regiecanlas" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+        <a href="mailto:regie.canlas@example.com" aria-label="Email">✉</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://picsum.photos/seed/mecha09/900/1000" alt="Featured 3D render">
+      <div class="hero-caption">
+        Latest Work
+        <div class="dots"><span class="on"></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-photo">
+      <img src="https://picsum.photos/seed/regieportrait/500/650" alt="Regie Canlas portrait">
+    </div>
+    <div class="about-text">
+      <span class="eyebrow">About Me</span>
+      <h2>Passionate<br><span class="accent">3D</span> Artist</h2>
+      <p>Hi! I'm Regie Canlas, a passionate 3D Artist specializing in Blender. I enjoy creating high-quality 3D models, environments, product visualizations, and realistic renders. My workflow combines modeling, sculpting, texturing, lighting, and rendering to transform ideas into visually compelling digital experiences.</p>
+      <div class="signature">Regie Canlas</div>
+      <a href="#" class="btn btn-outline download-btn" id="downloadResume">Download Resume ↓</a>
+    </div>
+    <div class="skills-cols">
+      <span class="eyebrow">Skills</span>
+      <h3 class="sub">Software</h3>
+      <div class="software-grid">
+        <div class="software-item"><div class="software-icon ic-blender">B</div>Blender</div>
+        <div class="software-item"><div class="software-icon ic-zbrush">Z</div>ZBrush</div>
+        <div class="software-item"><div class="software-icon ic-ps">Ps</div>Photoshop</div>
+        <div class="software-item"><div class="software-icon ic-sp">S</div>Substance<br>Painter</div>
+        <div class="software-item"><div class="software-icon ic-ue">U</div>Unreal<br>Engine</div>
+        <div class="software-item"><div class="software-icon ic-ai">Ai</div>Illustrator</div>
+      </div>
+      <h3 class="sub">Specialties</h3>
+      <ul class="specialties">
+        <li>Hard Surface Modeling</li>
+        <li>Lighting</li>
+        <li>Character Modeling</li>
+        <li>Rendering</li>
+        <li>Sculpting</li>
+        <li>Product Visualization</li>
+        <li>UV Mapping</li>
+        <li>3D Printing Ready Models</li>
+        <li>Texturing</li>
+        <li>Environment Design</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="projects" class="tight">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" style="margin:0;">Featured Projects</span>
+      <a href="#gallery" class="view-all">View All Projects →</a>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <img src="https://picsum.photos/seed/watchrender/600/420" alt="Luxury product render">
+        <div class="project-info">
+          <div>
+            <h4>Luxury Product Render</h4>
+            <span class="meta">Product Visualization</span>
+            <span class="cat">Blender • Cycles</span>
+          </div>
+          <button class="arrow-btn" onclick="document.getElementById('gallery').scrollIntoView()" aria-label="View Luxury Product Render in gallery">→</button>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://picsum.photos/seed/orcsculpt/600/420" alt="Character sculpt">
+        <div class="project-info">
+          <div>
+            <h4>Character Sculpt</h4>
+            <span class="meta">High Poly Sculpt</span>
+            <span class="cat">Blender • ZBrush</span>
+          </div>
+          <button class="arrow-btn" onclick="document.getElementById('gallery').scrollIntoView()" aria-label="View Character Sculpt in gallery">→</button>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://picsum.photos/seed/stylizedhouse/600/420" alt="Stylized environment">
+        <div class="project-info">
+          <div>
+            <h4>Stylized Environment</h4>
+            <span class="meta">Game Asset</span>
+            <span class="cat">Blender</span>
+          </div>
+          <button class="arrow-btn" onclick="document.getElementById('gallery').scrollIntoView()" aria-label="View Stylized Environment in gallery">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="tight">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow" style="margin:0;">Gallery</span>
+      <div class="gallery-tabs" id="galleryTabs">
+        <button class="active" data-filter="all">ALL</button>
+        <button data-filter="characters">CHARACTERS</button>
+        <button data-filter="products">PRODUCTS</button>
+        <button data-filter="environments">ENVIRONMENTS</button>
+        <button data-filter="props">PROPS</button>
+      </div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <figure data-cat="products"><img src="https://picsum.photos/seed/camera3d/300/300" alt="Camera render"></figure>
+      <figure data-cat="products"><img src="https://picsum.photos/seed/motorbike3d/300/300" alt="Motorcycle render"></figure>
+      <figure data-cat="environments"><img src="https://picsum.photos/seed/interior3d/300/300" alt="Living room render"></figure>
+      <figure data-cat="products"><img src="https://picsum.photos/seed/car3d/300/300" alt="Car render"></figure>
+      <figure data-cat="characters"><img src="https://picsum.photos/seed/robothead3d/300/300" alt="Robot head render"></figure>
+      <figure data-cat="environments"><img src="https://picsum.photos/seed/campfire3d/300/300" alt="Environment render"></figure>
+      <figure data-cat="props"><img src="https://picsum.photos/seed/pistol3d/300/300" alt="Prop render"></figure>
+      <figure data-cat="characters">
+        <img src="https://picsum.photos/seed/mechbot3d/300/300" alt="Mech render">
+      </figure>
+      <figure data-cat="products"><img src="https://picsum.photos/seed/sneaker3d/300/300" alt="Sneaker render"></figure>
+      <figure data-cat="environments"><img src="https://picsum.photos/seed/lighthouse3d/300/300" alt="Lighthouse render"></figure>
+      <figure data-cat="characters" class="hidden-item"><img src="https://picsum.photos/seed/knightchar3d/300/300" alt="Knight character render"></figure>
+      <figure data-cat="props" class="hidden-item"><img src="https://picsum.photos/seed/sword3d/300/300" alt="Sword prop render"></figure>
+      <figure data-cat="environments" class="hidden-item"><img src="https://picsum.photos/seed/forest3d/300/300" alt="Forest environment render"></figure>
+      <figure data-cat="products" class="hidden-item"><img src="https://picsum.photos/seed/headphones3d/300/300" alt="Headphones render"></figure>
+      <figure data-cat="characters" class="hidden-item"><img src="https://picsum.photos/seed/alien3d/300/300" alt="Alien character render"></figure>
+    </div>
+    <div style="text-align:center; margin-top:30px;">
+      <button class="view-full-btn" id="viewFullGallery">View Full Gallery ⊞</button>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a href="#home" class="brand">
+        <img class="logo-img" id="logoFooter" src="" alt="Regie Canlas logo">
+        <div>
+          <div>REGIE CANLAS</div>
+          <span class="role-tag">3D Artist • Blender Artist</span>
+        </div>
+      </a>
+      <p>Bringing ideas to life through 3D.</p>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul class="links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul class="contact-list">
+        <li><span class="ic">✉</span> <a href="mailto:regie.canlas@example.com">regie.canlas@example.com</a></li>
+        <li><span class="ic">📍</span> Philippines</li>
+        <li><span class="ic">GH</span> <a href="https://github.com/regiecanlas" target="_blank" rel="noopener">github.com/regiecanlas</a></li>
+      </ul>
+    </div>
+    <div class="cta">
+      <h5>Let's Work Together!</h5>
+      <p>I'm open to freelance opportunities and exciting projects.</p>
+      <a href="mailto:regie.canlas@example.com" class="btn btn-outline">Get In Touch ↗</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Regie Canlas. All rights reserved.</div>
+</footer>
+
+<script>
+  /* ---------- Logo (embedded, swaps with theme) ---------- */
+  const LOGO_WHITE = "assets/logo-dark.png";   /* white logo, used on dark backgrounds */
+  const LOGO_BLACK = "assets/logo-light.png";  /* black logo, used on light backgrounds */
+  const logos = document.querySelectorAll('.logo-img');
+
+  /* ---------- Theme: auto-detects OS/browser light-dark, remembers manual choice ---------- */
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const prefersLight = window.matchMedia('(prefers-color-scheme: light)');
+
+  function applyTheme(theme){
+    root.setAttribute('data-theme', theme);
+    themeToggle.textContent = theme === 'light' ? '☀' : '☾';
+    themeToggle.setAttribute('aria-label', theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+    logos.forEach(img => { img.src = theme === 'light' ? LOGO_BLACK : LOGO_WHITE; });
+  }
+
+  function getPreferredTheme(){
+    const stored = localStorage.getItem('rc-theme');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return prefersLight.matches ? 'light' : 'dark';
+  }
+
+  applyTheme(getPreferredTheme());
+
+  themeToggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    localStorage.setItem('rc-theme', next);
+    applyTheme(next);
+  });
+
+  prefersLight.addEventListener('change', (e) => {
+    if (!localStorage.getItem('rc-theme')) applyTheme(e.matches ? 'light' : 'dark');
+  });
+
+  /* ---------- Mobile menu ---------- */
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuToggle.textContent = open ? '✕' : '☰';
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    menuToggle.textContent = '☰';
+  }));
+
+  /* ---------- Scroll-spy for active nav link ---------- */
+  const sections = ['home','about','projects','gallery','contact'].map(id => document.getElementById(id)).filter(Boolean);
+  const navAnchors = Array.from(navLinks.querySelectorAll('a'));
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navAnchors.forEach(a => a.classList.remove('active'));
+        const match = navAnchors.find(a => a.getAttribute('href') === '#' + entry.target.id);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+  sections.forEach(sec => spyObserver.observe(sec));
+
+  /* ---------- Gallery filter ---------- */
+  const galleryTabs = document.getElementById('galleryTabs');
+  const galleryGrid = document.getElementById('galleryGrid');
+  galleryTabs.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    galleryTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    galleryGrid.querySelectorAll('figure').forEach(fig => {
+      const show = filter === 'all' || fig.dataset.cat === filter;
+      fig.style.display = show ? '' : 'none';
+    });
+  });
+
+  /* ---------- View Full Gallery (expand/collapse extra items) ---------- */
+  const viewFullBtn = document.getElementById('viewFullGallery');
+  let expanded = false;
+  viewFullBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    galleryGrid.querySelectorAll('.hidden-item').forEach(fig => fig.classList.toggle('hidden-item', !expanded));
+    viewFullBtn.textContent = expanded ? 'Show Less ⊟' : 'View Full Gallery ⊞';
+    if (!expanded) galleryGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  /* ---------- Download Resume (generates a real downloadable file) ---------- */
+  const resumeText = "REGIE CANLAS\n3D Artist / Blender Artist\nregie.canlas@example.com | Philippines | github.com/regiecanlas\n\n"
+    + "SUMMARY\nPassionate 3D artist specializing in Blender, focused on hard-surface modeling, character sculpting, product visualization and stylized environments.\n\n"
+    + "SOFTWARE\nBlender, ZBrush, Photoshop, Substance Painter, Unreal Engine, Illustrator\n\n"
+    + "SPECIALTIES\nHard Surface Modeling, Character Modeling, Sculpting, UV Mapping, Texturing, Lighting, Rendering, Product Visualization, 3D Printing Ready Models, Environment Design\n\n"
+    + "Replace this file with your real resume PDF before publishing.";
+  const downloadResume = document.getElementById('downloadResume');
+  downloadResume.addEventListener('click', (e) => {
+    e.preventDefault();
+    const blob = new Blob([resumeText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Regie_Canlas_Resume.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
+
+</body>
+</html>
