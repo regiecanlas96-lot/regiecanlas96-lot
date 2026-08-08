@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+cd /home/claude/portfolio && python3 << 'PYEOF'
+white_b64 = open('/home/claude/logo_white_trim.png.b64.txt').read().strip()
+black_b64 = open('/home/claude/logo_black_trim.png.b64.txt').read().strip()
+
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -291,7 +295,7 @@
 <header>
   <nav class="wrap">
     <a href="#home" class="brand">
-      <img class="logo-img" id="logoNav" src="" alt="Regie Logo">
+      <img class="logo-img" id="logoNav" src="" alt="Regie Canlas logo">
       <span>REGIE CANLAS</span>
     </a>
     <ul class="nav-links" id="navLinks">
@@ -464,7 +468,8 @@
   <div class="wrap footer-grid">
     <div class="footer-brand">
       <a href="#home" class="brand">
-        <img class="logo-img" id="logoNav" src="" alt="Regie Canlas Logo">        <div>
+        <img class="logo-img" id="logoFooter" src="" alt="Regie Canlas logo">
+        <div>
           <div>REGIE CANLAS</div>
           <span class="role-tag">3D Artist • Blender Artist</span>
         </div>
@@ -501,9 +506,9 @@
 
 <script>
   /* ---------- Logo (embedded, swaps with theme) ---------- */
-const LOGO_WHITE = "./images/logo-white.png";
-const LOGO_BLACK = "./images/logo-black.png";
-const logos = document.querySelectorAll(".logo-img");
+  const LOGO_WHITE = "data:image/png;base64,__WHITE_B64__";
+  const LOGO_BLACK = "data:image/png;base64,__BLACK_B64__";
+  const logos = document.querySelectorAll('.logo-img');
 
   /* ---------- Theme: auto-detects OS/browser light-dark, remembers manual choice ---------- */
   const root = document.documentElement;
@@ -612,3 +617,11 @@ const logos = document.querySelectorAll(".logo-img");
 </body>
 </html>
 '''
+
+html = html.replace("__WHITE_B64__", white_b64).replace("__BLACK_B64__", black_b64)
+
+with open('index.html', 'w') as f:
+    f.write(html)
+
+print(len(html), "chars written")
+PYEOF
