@@ -157,7 +157,7 @@
   .signature{font-family:'Caveat', cursive; font-size:30px; color:var(--cyan); margin-bottom:22px;}
 
   .skills-cols h3.sub{font-size:12px; letter-spacing:2px; color:var(--text-faint); margin:0 0 16px; text-transform:uppercase;}
-  .software-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:30px;}
+  .software-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:30px;}
   .software-item{
     background:var(--card); border:1px solid var(--border); border-radius:10px;
     padding:16px 8px; text-align:center; font-size:11.5px; color:var(--text-dim); font-weight:600;
@@ -172,6 +172,7 @@
   .ic-blender{background:#e6844633;color:#f4813f;}
   .ic-ps{background:#31a8ff22;color:#1f8fe0;}
   .ic-ue{background:#88888822;color:var(--text);}
+  .ic-unity{background:#88888822;color:var(--text);}
 
   .specialties{display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; font-size:14px; color:var(--text-dim);}
   .specialties li{display:flex; align-items:center; gap:8px;}
@@ -272,7 +273,7 @@
     section{padding:56px 0;}
     section.tight{padding:44px 0;}
     .about-grid{gap:32px;}
-    .software-grid{grid-template-columns:repeat(3,1fr);}
+    .software-grid{grid-template-columns:repeat(2,1fr);}
     .projects-grid{grid-template-columns:1fr;}
     .gallery-grid{grid-template-columns:repeat(2,1fr); grid-auto-rows:150px;}
     .footer-grid{grid-template-columns:1fr; gap:32px;}
@@ -358,6 +359,7 @@
         <div class="software-item"><div class="software-icon ic-blender"><img src="logo-blender.png" alt="Blender logo"></div>Blender</div>
         <div class="software-item"><div class="software-icon ic-ps">Ps</div>Photoshop</div>
         <div class="software-item"><div class="software-icon ic-ue"><img src="logo-unreal.png" alt="Unreal Engine logo"></div>Unreal<br>Engine</div>
+        <div class="software-item"><div class="software-icon ic-unity"><img src="logo-unity.png" alt="Unity logo"></div>Unity</div>
       </div>
       <h3 class="sub">Specialties</h3>
       <ul class="specialties">
@@ -484,7 +486,6 @@
       <h5>Contact</h5>
       <ul class="contact-list">
         <li><span class="ic">✉</span> <a href="mailto:regiemerza29@gmail.com">regiemerza29@gmail.com</a></li>
-        <li><span class="ic">📍</span> Philippines</li>
         <li><span class="ic">GH</span> <a href="https://github.com/regiecanlas" target="_blank" rel="noopener">github.com/regiecanlas</a></li>
       </ul>
     </div>
@@ -589,7 +590,7 @@
   /* ---------- Download Resume (generates a real downloadable file) ---------- */
   const resumeText = "REGIE CANLAS\n3D Artist / Blender Artist\nregiemerza29@gmail.com | Philippines | github.com/regiecanlas\n\n"
     + "SUMMARY\nPassionate 3D artist specializing in Blender, focused on hard-surface modeling, character sculpting, product visualization and stylized environments.\n\n"
-    + "SOFTWARE\nBlender, Photoshop, Unreal Engine\n\n"
+    + "SOFTWARE\nBlender, Photoshop, Unreal Engine, Unity\n\n"
     + "SPECIALTIES\nHard Surface Modeling, Character Modeling, Sculpting, UV Mapping, Texturing, Lighting, Rendering, Product Visualization, 3D Printing Ready Models, Environment Design\n\n"
     + "Replace this file with your real resume PDF before publishing.";
   const downloadResume = document.getElementById('downloadResume');
